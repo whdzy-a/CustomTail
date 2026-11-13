@@ -10,52 +10,6 @@
 
 > 想按「我想干什么」快速查所有能按 / 能拖 / 能改的地方，见 **[操作总表.md](操作总表.md)**（游戏内 · 菜单 · 配置 · 文件 · 编辑器 · 工具 · 日志，九个系列，逐项核对过代码）。
 
-## 目录结构
-
-```
-CustomTail/
-├─ src/
-│  ├─ Plugin.cs                 BepInEx 入口（F9 热重载 JSON）
-│  ├─ Extras.cs
-│  └─ Mesh/
-│     ├─ Json.cs                极简 JSON 解析器
-│     ├─ MeshData.cs            点/线/三角形数据模型与解析
-│     ├─ MeshRuntime.cs         绑定解算 + 自由点 PBD 求解
-│     ├─ AtlasAutoLoader.cs     扫 atlases/ 的 customtail-autoload.json，自动注册图集
-│     └─ MeshRenderer.cs        三角网格 sprite 与 PlayerGraphics 钩子
-├─ editor/
-│  ├─ tailmesh-editor.html      2D 网格编辑器（单文件，离线）
-│  └─ atlas-cache/              图集缓存（atlas_dump.py 生成，可随时删了重生成）
-│     ├─ atlas-pack.js          编辑器启动时自动载入的 sprite 索引
-│     ├─ index.json             同样的内容，给别的工具/排查用
-│     └─ png/*.png              每个图集的贴图
-├─ mod/
-│  ├─ tailmesh/                 导出的 *.json 放这里
-│  └─ newest/plugins/           编译产物
-├─ tooling/
-│  ├─ JsonCheck/                用模组自己的解析器校验 JSON
-│  ├─ CompileCheck/             没有游戏安装时，用 lib\ 里的程序集编译 src 做语法/类型校验
-│  ├─ RollCheck/                滚转角正负/幅度 的纯函数单测（net48，直接跑 exe）
-│  ├─ AngleCheck/               游戏端角度约束解算的单测（net48，直接跑 exe）
-│  ├─ RefDump/                  只读反射工具（Cecil）：查游戏程序集里的类型/字段/IL
-│  ├─ tailverts_check.js        尾巴网格顶点编号/只读/精确绑定/导出导入 校验（Node）
-│  ├─ drag_check.js             选择拖动 vs 施力拖动 语义校验（Node）
-│  ├─ tri_check.js              三角形 + 三角形组贴图 校验（Node）
-│  ├─ angle_check.js            角度约束（三点夹角）/ 圆弧 / 默认线宽 / 隐藏不可选 校验（Node）
-│  ├─ tool_hub_check.js         三角形组/自由贴图工具、选点模式、图集分流与模组筛选 校验（Node）
-│  ├─ undo_tex_check.js         撤回归档不能丢贴图（tri / sprite / 草稿）校验（Node）
-│  ├─ roundtrip_tex_check.js    保存→重开不丢贴图（内嵌像素 / 老文件兼容 / 图集后载入）校验（Node）
-│  ├─ temp_atlas_check.js       临时图集（注入 PNG / 切块 / 改名 / 导出 txt 格式 / 清空）校验（Node）
-│  ├─ project_check.js          项目文件（覆盖保存/新建/另存为/恢复）校验（Node）
-│  ├─ syntax_check.js           只做 HTML 内联脚本的语法检查
-│  ├─ ux_check.js               数值输入 / 尾巴受力 / 合并组 / 快捷键 / 拉框 / 视图开关 校验（Node）
-│  ├─ atlas_dump.py             导出雨世界图集（本体 + 模组 + AB 包）给编辑器用
-│  ├─ mesh_smoke.js             编辑器冒烟测试（Node）
-│  ├─ render_mesh.py            把场景导成 PNG 核对
-│  └─ make_example.js           用编辑器模拟生成示例 JSON
-└─ _archive/                    上一版（贴纸精灵）的备份
-```
-
 ## 尾巴是怎么"由游戏数据"来的
 
 游戏里尾巴是 4 个 `TailSegment`：
